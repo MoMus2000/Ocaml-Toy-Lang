@@ -96,6 +96,7 @@ let parse_statement tokens =
 let rec parse(tokens: token list) : program =
   match tokens with
     [] -> []
+    | EOF::_ -> []
     | _ -> 
       let (stmt, rest) = parse_statement tokens in
         stmt :: parse rest
