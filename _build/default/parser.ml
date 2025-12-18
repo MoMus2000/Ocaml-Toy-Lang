@@ -54,7 +54,6 @@ let rec string_of_expression expr =
 
 let parse_binary tokens = 
   let (lhs, rest) = parse_unary tokens in
-   Printf.printf "parse_binary: lhs = %s\n" (string_of_expression lhs);
   let rec loop lhs rest = 
     match rest with
     | (op_token : token) :: rest' when
@@ -79,8 +78,6 @@ let parse_binary tokens =
 
 let parse_expression tokens =
   parse_binary tokens
-
-
 
 let string_of_statement stmt =
   match stmt with

@@ -42,6 +42,7 @@ let rec lex (source: string) (pos: int) : (Token.token * int) =
     | '+' -> (Plus, pos + 1)
     | '-' -> (Minus, pos + 1)
     | '/' -> (Slash, pos + 1)
+    | '*' -> (Star, pos + 1)
     | ';' -> (SemiColon, pos+1)
     | '=' ->
         (
@@ -119,15 +120,18 @@ let entry_point =
       print_file_output content;
 
       let tokens = lex_all content in
-      Printf.printf "Length = %d\n" (List.length tokens);
       List.iter (fun t -> Printf.printf "%s" (string_of_token t)) tokens;
 
       let open Parser in
       let statements = parse tokens in
       print_endline "";
-      Printf.printf "Length = %d\n" (List.length statements);
       List.iter (fun stmt -> 
-        Printf.printf "%s\n" (string_of_statement stmt)) statements;
+      let open Evaluate in
+      let value = evaluate stmt in
+        match value with
+        | IntValue s -> Printf.printf "%d\n" s
+        | _ -> failwith "Yet to Implement"
+      ) statements;
       print_endline ""
 
   | _ ->
