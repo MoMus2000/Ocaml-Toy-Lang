@@ -1,0 +1,16 @@
+# dune exec ./main.exe sample_file.lox
+# OCAMLPARAM: unset
+# Shared cache: enabled-except-user-rules
+# Shared cache location: /Users/mmuhammad/.cache/dune/db
+# Workspace root: /Users/mmuhammad/Desktop/projects/ocaml-lexer
+# Auto-detected concurrency: 8
+# Dune context:
+#  { name = "default"
+#  ; kind = "default"
+#  ; profile = Dev
+#  ; merlin = true
+#  ; fdo_target_exe = None
+#  ; build_dir = In_build_dir "default"
+#  ; instrument_with = []
+#  }
+$ /Users/mmuhammad/.opam/default/bin/ocamlc.opt -config > /var/folders/bd/kht9pj7n01176mdtccv6lc1h0000gn/T/dune_f464de_output
