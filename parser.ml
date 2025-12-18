@@ -96,7 +96,6 @@ let rec parse_binary min_prec tokens =
   in
   loop lhs rest
 
-
 let parse_expression tokens =
   parse_binary 0 tokens
 
