@@ -52,32 +52,53 @@ let rec string_of_expression expr =
       Printf.sprintf "L: %s OP: %s R: %s" (string_of_expression lexpr) (string_of_op op) (string_of_expression rexpr);
   | _ -> failwith "TODO"
 
-let parse_binary tokens = 
+let precedence = function
+  | Plus | Minus -> 1
+  | Star | Slash -> 2
+
+
+let token_precedence = function
+  | Token.Plus | Token.Minus -> 1
+  | Token.Star | Token.Slash -> 2
+  | _ -> 0
+
+let is_binary_token = function
+  | Token.Plus | Token.Minus | Token.Star | Token.Slash -> true
+  | _ -> false
+
+let token_to_operator = function
+  | Token.Plus  -> Plus
+  | Token.Minus -> Minus
+  | Token.Star  -> Star
+  | Token.Slash -> Slash
+  | undefined -> 
+      Printf.printf "not a binary operator %s" (string_of_token undefined);
+      failwith "Not a Bin"
+
+let rec parse_binary min_prec tokens =
   let (lhs, rest) = parse_unary tokens in
-  let rec loop lhs rest = 
+
+  let rec loop lhs rest =
     match rest with
-    | (op_token : token) :: rest' when
-      (match op_token with
-       | Plus | Minus | Star | Slash -> true
-       | _ -> false) ->
-         let (rhs, rest'') = parse_unary rest' in
-         let operator = 
-         (match op_token with 
-         | Token.Plus -> Plus
-         | Token.Minus -> Minus
-         | Token.Star -> Star
-         | Token.Slash -> Slash
-         | _ -> failwith "Unreachable"
-         )
-         in
-         let lhs = BinaryOp (lhs, operator, rhs) in
-         loop lhs rest''
+    | op_token :: rest'
+      when is_binary_token op_token &&
+      token_precedence op_token >= min_prec ->
+
+        let prec = token_precedence op_token in
+        let operator = token_to_operator op_token in
+
+        let (rhs, rest'') = parse_binary (prec + 1) rest' in
+
+        let lhs = BinaryOp (lhs, operator, rhs) in
+        loop lhs rest''
+
     | _ -> (lhs, rest)
   in
   loop lhs rest
 
+
 let parse_expression tokens =
-  parse_binary tokens
+  parse_binary 0 tokens
 
 let string_of_statement stmt =
   match stmt with
