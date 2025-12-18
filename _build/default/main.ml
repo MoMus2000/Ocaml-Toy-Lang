@@ -97,7 +97,6 @@ let rec lex (source: string) (pos: int) : (Token.token * int) =
 
   end
 
-
 let lex_all src = 
   let rec loop acc pos =
     let (tok, pos) = lex src pos in
